@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<htmldocument.getElementById('table')>
   <head>
     <style>
     h1 {
@@ -13,14 +13,18 @@
         border-radius: 5px;
         padding: 5px 10px;
         display: inline-block;
-        width: 7em;
+        width: 6em;
         text-align: center;
         box-sizing: border-box;
     }
-    #table .row {
-        padding: 10px 10px;
+    .row {
+        overflow: auto;
+        white-space: nowrap;
         display: inline-block;
+    }
+    #table .row {
         border-bottom: 1px solid lightgrey;
+        padding: 10px 10px;
     }
     .number {
         display: inline-block;
@@ -130,37 +134,39 @@
     <p>
         By combining the six sense-bases,
     </p>
-    <p>
+    <div class="row">
         <div class="pill body">body</div>
         <div class="pill eye">eye</div>
         <div class="pill ear">ear</div>
+    </div>
+    <div class="row">
         <div class="pill nose">nose</div>
         <div class="pill tongue">tongue</div>
         <div class="pill mind">mind</div>
-    </p>
+    </div>
     <p>
         with the 3 times,
     </p>
-    <p>
+    <div class="row">
         <div class="pill past">past</div>
         <div class="pill present">present</div>
         <div class="pill future">future</div>
-    </p>
+    </div>
     <p>
         the 3 affective qualities,
     </p>
-    <p>
+    <div class="row">
         <div class="pill pleasant">pleasant</div>
         <div class="pill unpleasant">unpleasant</div>
         <div class="pill neutral">neutral</div>
-    </p>
+    </div>
     <p>
         and contemplating in 2 ways,
     </p>
-    <p>
+    <div class="row">
         <div class="pill internal">internal</div>
         <div class="pill external">external</div>
-    </p>
+    </div>
     <p>
     ... one obtains a list of 108 kinds of mindfulness. By iterating this entire list, one contemplates everything in the world of experience.
     </p>
@@ -218,7 +224,6 @@
         container.appendChild(number);
 
         for(let aspect of combination) {
-            
             let el = document.createElement('span');
             let text = document.createTextNode(aspect);
             el.appendChild(text);
@@ -226,7 +231,11 @@
             el.classList.add(aspect);
             container.appendChild(el);
         }
+
         document.getElementById('table').appendChild(container);
+
+        let br = document.createElement('br');
+        document.getElementById('table').appendChild(br);
     }
 
     </script>
