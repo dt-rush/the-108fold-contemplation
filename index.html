@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    h1 {
+        font-size: 2em;
+    }
+    p {
+        margin: 2em;
+    }
+    .pill {
+        margin: 0 10px;
+        border-radius: 5px;
+        padding: 5px 10px;
+        display: inline-block;
+        width: 7em;
+        text-align: center;
+        box-sizing: border-box;
+    }
+    #table .row {
+        padding: 10px 10px;
+        display: inline-block;
+        border-bottom: 1px solid lightgrey;
+    }
+    .number {
+        display: inline-block;
+        padding: 1em;
+        width: 3em;
+        text-align: center;
+    }
+    .body {
+        background-color: #Ff9fae;
+    }
+    .eye {
+        background-color: #8cee25;
+    }
+    .ear {
+        background-color: #9df7e7;
+    }
+    .nose {
+        background-color: #F5d8b7;
+    }
+    .tongue {
+        background-color: #E688ac;
+    }
+    .mind {
+        background-color: #5699ff;
+    }
+    .past {
+        position: relative;
+        border: 1px solid black;
+    }
+    .past:before {
+        position: absolute;
+        display: inline-block;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        content: "";
+        width: 33%;
+        height: 100%;
+        background-color: #C0C0EE;
+    }
+    .present {
+        position: relative;
+        border: 1px solid black;
+    }
+    .present:before {
+        position: absolute;
+        display: inline-block;
+        z-index: -1;
+        top: 0;
+        left: 33%;
+        content: "";
+        width: 33%;
+        height: 100%;
+        background-color: #C0C0EE;
+    }
+    .future {
+        position: relative;
+        border: 1px solid black;
+    }
+    .future:before {
+        position: absolute;
+        display: inline-block;
+        z-index: -1;
+        top: 0;
+        right: 0;
+        content: "";
+        width: 33%;
+        height: 100%;
+        background-color: #C0C0EE;
+    }
+    .pleasant {
+        color: green;
+        background-color: #aaffaa;
+    }
+    .unpleasant {
+        color: #FFAAAA;
+        background-color: #660000;
+    }
+    .neutral {
+        color: black;
+        background-color: #EEEEEE;
+    }
+    .internal {
+        position: relative;
+    }
+    .internal:before {
+        position: absolute;
+        display: inline-block;
+        z-index: -1;
+        top: 10%;
+        height: 80%;
+        left: 33%;
+        right: 33%;
+        content: "";
+        border-radius: 5px;
+        background-color: #DDDDDD;
+    }
+    .external {
+        border: 3px solid #CCCCCC;
+    }
+    </style>
+  </head>
+  <body>
+
+    <h1>The 108-fold contemplation</h1>
+    <hr/>
+    <p>
+        By combining the six sense-bases,
+    </p>
+    <p>
+        <div class="pill body">body</div>
+        <div class="pill eye">eye</div>
+        <div class="pill ear">ear</div>
+        <div class="pill nose">nose</div>
+        <div class="pill tongue">tongue</div>
+        <div class="pill mind">mind</div>
+    </p>
+    <p>
+        with the 3 times,
+    </p>
+    <p>
+        <div class="pill past">past</div>
+        <div class="pill present">present</div>
+        <div class="pill future">future</div>
+    </p>
+    <p>
+        the 3 affective qualities,
+    </p>
+    <p>
+        <div class="pill pleasant">pleasant</div>
+        <div class="pill unpleasant">unpleasant</div>
+        <div class="pill neutral">neutral</div>
+    </p>
+    <p>
+        and contemplating in 2 ways,
+    </p>
+    <p>
+        <div class="pill internal">internal</div>
+        <div class="pill external">external</div>
+    </p>
+    <p>
+    ... one obtains a list of 108 kinds of mindfulness. By iterating this entire list, one contemplates everything in the world of experience.
+    </p>
+
+    <hr/>
+
+    <p>
+        <div id="table"></div>
+    </p>
+
+    <script>
+
+
+    const sets = [
+      ["body", "eye", "ear", "nose", "tongue", "mind"],
+      ["past", "present", "future"],
+      ["pleasant", "unpleasant", "neutral"],
+      ["internal", "external"]
+    ];
+
+    function generateData(sets, index = 0, parent = {}) {
+      if (index === sets.length) {
+        return;
+      }
+      const set = sets[index];
+      set.forEach(x => {
+        const child = { name: x, value: 1, children: [] };
+        parent.children.push(child);
+        generateData(sets, index + 1, child);
+      });
+    }
+
+    const data = { name: "nibbana", value: 1, children: [] };
+    generateData(sets, 0, data);
+
+    function* product(sets) {
+        if (sets.length === 0) {
+            yield [];
+            return;
+        }
+        for (const x of sets[0]) {
+            for (const p of product(sets.slice(1))) {
+                yield [x, ...p];
+            }
+        }
+    }
+
+    const combinations = Array.from(product(sets));
+    for (let [index, combination] of combinations.entries()) {
+        let container = document.createElement('div');
+        container.setAttribute('class', 'row');
+        let number = document.createElement('span');
+        number.classList.add('number');
+        number.appendChild(document.createTextNode(index + 1));
+        container.appendChild(number);
+
+        for(let aspect of combination) {
+            
+            let el = document.createElement('span');
+            let text = document.createTextNode(aspect);
+            el.appendChild(text);
+            el.classList.add('pill');
+            el.classList.add(aspect);
+            container.appendChild(el);
+        }
+        document.getElementById('table').appendChild(container);
+    }
+
+    </script>
+  </body>
+</html>

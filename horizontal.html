@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+  </head>
+  <body>
+    <script>
+
+
+    const sets = [
+      ["body", "eye", "ear", "nose", "tongue", "mind"],
+      ["past", "present", "future"],
+      ["pleasant", "unpleasant", "neutral"],
+      ["internal", "external"]
+    ];
+
+    function generateData(sets, index = 0, parent = {}) {
+      if (index === sets.length) {
+        return;
+      }
+      const set = sets[index];
+      set.forEach(x => {
+        const child = { name: x, value: 1, children: [] };
+        parent.children.push(child);
+        generateData(sets, index + 1, child);
+      });
+    }
+
+    const data = { name: "nibbana", value: 1, children: [] };
+    generateData(sets, 0, data);
+
+
+const width = 888;
+const height = 2222;
+
+const partition = d3.partition()
+    .size([height, width])
+    .padding(0)
+
+const root = d3.hierarchy(data);
+root.sum(x => x.value);
+root.sort((a, b) => a.height - b.height);
+console.log(root);
+partition(root);
+
+const svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("font-size", 12);
+
+const cell = svg.selectAll("g")
+    .data(root.descendants())
+    .enter().append("g")
+    .attr("transform", d => `translate(${d.y0}, ${d.x0})`);
+
+cell.append("rect")
+    .attr("fill", "lightgrey")
+    .attr("width", d => d.y1 - d.y0)
+    .attr("height", d => (d.x1 - d.x0));
+
+cell.append("text")
+    .attr("x", d => (d.y1 - d.y0) / 2 - 30)
+    .attr("y", d => 5 + (d.x1 - d.x0) / 2) 
+    .text(d => d.data.name);
+
+    </script>
+  </body>
+</html>
